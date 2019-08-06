@@ -193,3 +193,5 @@
 /SFML_C++_Simple_Games/Debug/SFML_C++_Simple_Games.pdb
 /SFML_C++_Simple_Games/Debug/SFML_C++_Simple_Games.ilk
 /SFML_C++_Simple_Games/Debug/SFML_C++_Simple_Games.exe
+/SFML_C++_Simple_Games/SFML_C++_Simple_Games/Debug/Game.obj
+*.ipch
