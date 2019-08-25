@@ -54,6 +54,7 @@ private:
 	void initFonts();
 	void initText();
 	void initEnemies();
+
 public:
 	//Constructors / Destructors
 	Game();
