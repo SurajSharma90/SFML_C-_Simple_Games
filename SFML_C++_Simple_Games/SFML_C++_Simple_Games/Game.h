@@ -1,79 +1,36 @@
 #pragma once
 
 #include<iostream>
-#include<vector>
 #include<ctime>
-#include<sstream>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
-/*
-	Class that acts as the game engine.
-	Wrapper class.
-*/
+#include "Player.h"
 
 class Game
 {
 private:
-	//Variables
-	//Window
-	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
-	sf::Event ev;
-
-	//Mouse positions
-	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousePosView;
-
-	//Resources
-	sf::Font font;
-
-	//Text
-	sf::Text uiText;
-
-	//Game logic
+	sf::RenderWindow* window;
 	bool endGame;
-	unsigned points;
-	int health;
-	float enemySpawnTimer;
-	float enemySpawnTimerMax;
-	int maxEnemies;
-	bool mouseHeld;
+	sf::Event sfmlEvent;
 
-	//Game objects
-	std::vector<sf::RectangleShape> enemies;
-	sf::RectangleShape enemy;
+	Player player;
 
-	//Private functions
 	void initVariables();
 	void initWindow();
-	void initFonts();
-	void initText();
-	void initEnemies();
 
 public:
-	//Constructors / Destructors
+	//Constructors and Destructors
 	Game();
-	virtual ~Game();
+	~Game();
 
 	//Accessors
-	const bool running() const;
-	const bool getEndGame() const;
+
+	//Modifiers
 
 	//Functions
-	void spawnEnemy();
-
+	const bool running() const;
 	void pollEvents();
-	void updateMousePositions();
-	void updateText();
-	void updateEnemies();
-	void update();
 
-	void renderText(sf::RenderTarget& target);
-	void renderEnemies(sf::RenderTarget& target);
+	void update();
 	void render();
 };
