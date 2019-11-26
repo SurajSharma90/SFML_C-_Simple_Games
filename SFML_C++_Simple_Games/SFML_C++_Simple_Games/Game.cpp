@@ -131,7 +131,7 @@ void Game::updateCollision()
 				this->points++;
 				break;
 			case SwagBallTypes::DAMAGING:
-				this->player.takeDamage(10);
+				this->player.takeDamage(1);
 				break;
 			case SwagBallTypes::HEALING:
 				this->player.gainHealth(1);
