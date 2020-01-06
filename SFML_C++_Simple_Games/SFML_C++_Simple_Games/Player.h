@@ -26,6 +26,7 @@ public:
 
 	//Accessor
 	const sf::Vector2f& getPos() const;
+	const sf::FloatRect getBounds() const;
 
 	//Functions
 	void move(const float dirX, const float dirY);
