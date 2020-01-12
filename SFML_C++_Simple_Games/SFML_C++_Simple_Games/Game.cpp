@@ -132,13 +132,20 @@ void Game::updateEnemies()
 	this->spawnTimer += 0.5f;
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % 200, rand() % 200));
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x-20.f, -100.f));
 		this->spawnTimer = 0.f;
 	}
 
-	for (auto *enemy : this->enemies)
+	for (int i = 0; i < this->enemies.size(); ++i)
 	{
-		enemy->update();
+		this->enemies[i]->update();
+
+		//Remove enemy at the bottom of the screen
+		if (this->enemies[i]->getBounds().top > this->window->getSize().y)
+		{
+			this->enemies.erase(this->enemies.begin() + i);
+			std::cout << this->enemies.size() << "\n";
+		}
 	}
 }
 
