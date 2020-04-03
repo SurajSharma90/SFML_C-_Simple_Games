@@ -27,6 +27,21 @@ void Game::initGUI()
 	this->pointText.setString("test");
 }
 
+void Game::initWorld()
+{
+	if (!this->worldBackgroundTex.loadFromFile("Textures/background1.jpg"))
+	{
+		std::cout << "ERROR::GAME::COULD NOT LOAD BACKGROUND TEXTURE" << "\n";
+	}
+
+	this->worldBackground.setTexture(this->worldBackgroundTex);
+}
+
+void Game::initSystems()
+{
+	this->points = 0;
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -44,6 +59,9 @@ Game::Game()
 	this->initWindow();
 	this->initTextures();
 	this->initGUI();
+	this->initWorld();
+	this->initSystems();
+
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -123,7 +141,41 @@ void Game::updateInput()
 
 void Game::updateGUI()
 {
+	std::stringstream ss;
 
+	ss << "Points: " << this->points;
+
+	this->pointText.setString(ss.str());
+}
+
+void Game::updateWorld()
+{
+
+}
+
+void Game::updateCollision()
+{
+	//Left world collision
+	if (this->player->getBounds().left < 0.f)
+	{
+		this->player->setPosition(0.f, this->player->getBounds().top);
+	}
+	//Right world collison
+	else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
+	{
+		this->player->setPosition(this->window->getSize().x - this->player->getBounds().width, this->player->getBounds().top);
+	}
+
+	//Top world collision
+	if (this->player->getBounds().top < 0.f)
+	{
+		this->player->setPosition(this->player->getBounds().left, 0.f);
+	}
+	//Bottom world collision
+	else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)
+	{
+		this->player->setPosition(this->player->getBounds().left, this->window->getSize().y - this->player->getBounds().height);
+	}
 }
 
 void Game::updateBullets()
@@ -165,7 +217,13 @@ void Game::updateEnemies()
 		//Bullet culling (top of screen)
 		if (enemy->getBounds().top > this->window->getSize().y)
 		{
-			//Delete bullet
+			//Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+		else if(enemy->getBounds().intersects(this->player->getBounds()))
+		{
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
 			--counter;
@@ -184,6 +242,8 @@ void Game::updateCombat()
 		{
 			if (this->enemies[i]->getBounds().intersects(this->bullets[k]->getBounds()))
 			{
+				this->points += this->enemies[i]->getPoints();
+
 				delete this->enemies[i];
 				this->enemies.erase(this->enemies.begin() + i);
 
@@ -204,6 +264,8 @@ void Game::update()
 
 	this->player->update();
 
+	this->updateCollision();
+
 	this->updateBullets();
 
 	this->updateEnemies();
@@ -211,6 +273,8 @@ void Game::update()
 	this->updateCombat();
 
 	this->updateGUI();
+
+	this->updateWorld();
 }
 
 void Game::renderGUI()
@@ -218,9 +282,17 @@ void Game::renderGUI()
 	this->window->draw(this->pointText);
 }
 
+void Game::renderWorld()
+{
+	this->window->draw(this->worldBackground);
+}
+
 void Game::render()
 {
 	this->window->clear();
+
+	//Draw world
+	this->renderWorld();
 
 	//Draw all the stuffs
 	this->player->render(*this->window);

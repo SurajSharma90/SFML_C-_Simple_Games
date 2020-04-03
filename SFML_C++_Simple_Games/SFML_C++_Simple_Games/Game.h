@@ -1,6 +1,8 @@
 #pragma once
 
 #include<map>
+#include<string>
+#include<sstream>
 #include"Player.h"
 #include"Bullet.h"
 #include"Enemy.h"
@@ -19,6 +21,13 @@ private:
 	sf::Font font;
 	sf::Text pointText;
 
+	//World
+	sf::Texture worldBackgroundTex;
+	sf::Sprite worldBackground;
+
+	//Systems
+	unsigned points;
+
 	//Player
 	Player* player;
 
@@ -31,6 +40,8 @@ private:
 	void initWindow();
 	void initTextures();
 	void initGUI();
+	void initWorld();
+	void initSystems();
 
 	void initPlayer();
 	void initEnemies();
@@ -45,11 +56,15 @@ public:
 	void updatePollEvents();
 	void updateInput();
 	void updateGUI();
+	void updateWorld();
+	void updateCollision();
 	void updateBullets();
 	void updateEnemies();
 	void updateCombat();
 	void update();
+
 	void renderGUI();
+	void renderWorld();
 	void render();
 };
 
