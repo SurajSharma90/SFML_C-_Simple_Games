@@ -37,6 +37,19 @@ void Game::update()
 			this->window.close();
 		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)
 			this->window.close();
+
+		if (
+			this->ev.type == sf::Event::KeyReleased &&
+			(
+				this->ev.key.code == sf::Keyboard::A ||
+				this->ev.key.code == sf::Keyboard::D ||
+				this->ev.key.code == sf::Keyboard::W ||
+				this->ev.key.code == sf::Keyboard::S
+				)
+			)
+		{
+			this->player->resetAnimationTimer();
+		}
 	}
 
 	this->updatePlayer();
