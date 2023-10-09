@@ -22,6 +22,7 @@ private:
 	float drag;
 	float gravity;
 	float velocityMaxY;
+	bool canJump;
 
 	//Core
 
@@ -43,6 +44,7 @@ public:
 	//Modifiers
 	void setPosition(const float x, const float y);
 	void resetVelocityY();
+	void setCanJump(const bool canJump) { this->canJump = canJump; }
 
 	//Functions	
 	void resetAnimationTimer();

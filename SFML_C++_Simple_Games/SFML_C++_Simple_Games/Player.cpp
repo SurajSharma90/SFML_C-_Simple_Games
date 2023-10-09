@@ -27,16 +27,18 @@ void Player::initAnimations()
 {
 	this->animationTimer.restart();
 	this->animationSwitch = true;
+	this->currentFrame.left = 0.f;
 }
 
 void Player::initPhysics()
 {
-	this->velocityMax = 20.f;
-	this->velocityMin = 1.f;
-	this->acceleration = 3.0f;
-	this->drag = 0.85f;
-	this->gravity = 4.f;
-	this->velocityMaxY = 15.f;
+	this->velocityMax = 22.f;
+	this->velocityMin = 2.0f;
+	this->acceleration = 3.5f;
+	this->drag = 0.84f;
+	this->gravity = 3.f;
+	this->velocityMaxY = 30.f;
+	this->canJump = false;
 }
 
 Player::Player()
@@ -105,10 +107,7 @@ void Player::updatePhysics()
 {
 	//Gravity
 	this->velocity.y += 1.0 * this->gravity;
-	if (std::abs(this->velocity.x) > this->velocityMaxY)
-	{
-		this->velocity.y = this->velocityMaxY * ((this->velocity.y < 0.f) ? -1.f : 1.f);
-	}
+	
 
 	//Deceleration
 	this->velocity *= this->drag;
@@ -136,6 +135,12 @@ void Player::updateMovement()
 		this->move(1.f, 0.f);
 		this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && canJump)
+	{
+		this->velocity.y = -70.f;
+		this->canJump = false;
+	}
 		
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) //Top
 	//{
@@ -149,9 +154,12 @@ void Player::updateMovement()
 
 void Player::updateAnimations()
 {
+	float speedPercent = (abs(this->velocity.x) / this->velocityMax);
+	std::cout << speedPercent << "\n";
+
 	if (this->animState == PLAYER_ANIMATION_STATES::IDLE)
 	{
-		if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2f || this->getAnimSwitch())
+		if (this->animationTimer.getElapsedTime().asMilliseconds() >= 200.f || this->getAnimSwitch())
 		{	
 			this->currentFrame.top = 0.f;
 			this->currentFrame.left += 40.f;
@@ -164,7 +172,7 @@ void Player::updateAnimations()
 	}
 	else if (this->animState == PLAYER_ANIMATION_STATES::MOVING_RIGHT)
 	{
-		if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1f || this->getAnimSwitch())
+		if (this->animationTimer.getElapsedTime().asMilliseconds() >= 40.f / speedPercent || this->getAnimSwitch())
 		{
 			this->currentFrame.top = 50.f;
 			this->currentFrame.left += 40.f;
@@ -180,7 +188,7 @@ void Player::updateAnimations()
 	}
 	else if (this->animState == PLAYER_ANIMATION_STATES::MOVING_LEFT)
 	{
-		if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1f || this->getAnimSwitch())
+		if (this->animationTimer.getElapsedTime().asMilliseconds() >= 40.f / speedPercent || this->getAnimSwitch())
 		{
 			this->currentFrame.top = 50.f;
 			this->currentFrame.left += 40.f;
