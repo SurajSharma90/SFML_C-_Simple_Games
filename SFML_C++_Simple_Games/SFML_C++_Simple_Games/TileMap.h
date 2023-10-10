@@ -6,9 +6,12 @@ class TileMap
 {
 private:
 	std::vector< std::vector<Tile*> > tiles;
+	sf::Texture* tileSheet;
+	unsigned tileSize;
 
 public:
 	TileMap();
+	TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size);
 	~TileMap();
 
 	//Functions
@@ -16,6 +19,6 @@ public:
 	void removeTile(unsigned x, unsigned y);
 
 	void update();
-	void render();
+	void render(sf::RenderTarget& target);
 };
 

@@ -7,20 +7,37 @@ void Game::initWindow()
 	this->window.setFramerateLimit(60);
 }
 
+void Game::initTileSheet()
+{
+	if (!this->tileSheet.loadFromFile("Textures/player_sheet.png"))
+	{
+		std::cout << "ERROR::GAME::Could not load the tile sheet!" << "\n";
+	}
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
 }
 
+void Game::initTileMap()
+{
+	this->tileMap = new TileMap(20, 20, &this->tileSheet, 50);
+	this->tileMap->addTile(0, 0);
+}
+
 Game::Game()
 {
 	this->initWindow();
+	this->initTileSheet();
 	this->initPlayer();
+	this->initTileMap();
 }
 
 Game::~Game()
 {
 	delete this->player;
+	delete this->tileMap;
 }
 
 void Game::updatePlayer()
@@ -40,6 +57,11 @@ void Game::updateCollision()
 			this->window.getSize().y - this->player->getGlobalBounds().height
 		);
 	}
+}
+
+void Game::updateTileMap()
+{
+	this->tileMap->update();
 }
 
 void Game::update()
@@ -69,6 +91,8 @@ void Game::update()
 	this->updatePlayer();
 
 	this->updateCollision();
+
+	this->updateTileMap();
 }
 
 void Game::renderPlayer()
@@ -76,11 +100,17 @@ void Game::renderPlayer()
 	this->player->render(this->window);
 }
 
+void Game::renderTileMap()
+{
+	this->tileMap->render(this->window);
+}
+
 void Game::render()
 {
 	this->window.clear();
 
 	//Render game
+	this->renderTileMap();
 	this->renderPlayer();
 
 	this->window.display();

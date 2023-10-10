@@ -34,8 +34,8 @@ void Player::initPhysics()
 {
 	this->velocityMax = 22.f;
 	this->velocityMin = 2.0f;
-	this->acceleration = 3.5f;
-	this->drag = 0.84f;
+	this->acceleration = 3.0f;
+	this->drag = 0.80f;
 	this->gravity = 3.f;
 	this->velocityMaxY = 30.f;
 	this->canJump = false;
@@ -118,6 +118,9 @@ void Player::updatePhysics()
 	if (std::abs(this->velocity.y) < this->velocityMin)
 		this->velocity.y = 0.f;
 
+	if(std::abs(this->velocity.x) <= 1.f)
+		this->velocity.x = 0.f;
+
 	this->sprite.move(this->velocity);
 }
 
@@ -128,12 +131,10 @@ void Player::updateMovement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) //Left
 	{
 		this->move(-1.f, 0.f);
-		this->animState = PLAYER_ANIMATION_STATES::MOVING_LEFT;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) //Right
 	{
 		this->move(1.f, 0.f);
-		this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && canJump)
@@ -141,15 +142,13 @@ void Player::updateMovement()
 		this->velocity.y = -70.f;
 		this->canJump = false;
 	}
-		
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) //Top
-	//{
-	//	this->sprite.move(0.f, -1.f);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) //Down
-	//{
-	//	this->sprite.move(0.f, 1.f);
-	//}
+	
+	if(this->velocity.x > 0.f)
+		this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
+	else if(this->velocity.x < 0.f)
+		this->animState = PLAYER_ANIMATION_STATES::MOVING_LEFT;
+	else
+		this->animState = PLAYER_ANIMATION_STATES::IDLE;
 }
 
 void Player::updateAnimations()
