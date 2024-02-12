@@ -41,14 +41,18 @@ public:
 	const sf::Vector2f getPosition() const;
 	const sf::FloatRect getGlobalBounds() const;
 
+	//Inline functions
+	inline const bool& getCanJump() const { return this->canJump; }
+	inline void setCanJump(const bool canJump) { this->canJump = canJump; }
+
 	//Modifiers
 	void setPosition(const float x, const float y);
 	void resetVelocityY();
-	void setCanJump(const bool canJump) { this->canJump = canJump; }
 
 	//Functions	
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
+	void jump();
 	void updatePhysics();
 	void updateMovement();
 	void updateAnimations();

@@ -103,6 +103,12 @@ void Player::move(const float dir_x, const float dir_y)
 	}
 }
 
+void Player::jump()
+{
+	this->velocity.y = -70.f;
+	this->canJump = false;
+}
+
 void Player::updatePhysics()
 {
 	//Gravity
@@ -126,23 +132,6 @@ void Player::updatePhysics()
 
 void Player::updateMovement()
 {
-	this->animState = PLAYER_ANIMATION_STATES::IDLE;
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) //Left
-	{
-		this->move(-1.f, 0.f);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) //Right
-	{
-		this->move(1.f, 0.f);
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && canJump)
-	{
-		this->velocity.y = -70.f;
-		this->canJump = false;
-	}
-	
 	if(this->velocity.x > 0.f)
 		this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
 	else if(this->velocity.x < 0.f)
@@ -154,7 +143,6 @@ void Player::updateMovement()
 void Player::updateAnimations()
 {
 	float speedPercent = (abs(this->velocity.x) / this->velocityMax);
-	std::cout << speedPercent << "\n";
 
 	if (this->animState == PLAYER_ANIMATION_STATES::IDLE)
 	{

@@ -33,12 +33,12 @@ TileMap::~TileMap()
 
 void TileMap::addTile(unsigned x, unsigned y)
 {
-  if(x < this->tiles.size())
+  if(x < this->tiles.size() && x >= 0)
   {
-    if(y < this->tiles[x].size())
+    if(y < this->tiles[x].size() && y >= 0)
     {
       if(this->tiles[x][y] == nullptr)
-        this->tiles[x][y] = new Tile(this->tileSheet, sf::IntRect(0, 0, this->tileSize, this->tileSize), false);
+        this->tiles[x][y] = new Tile(x, y, this->tileSize, this->tileSheet, sf::IntRect(0, 0, this->tileSize, this->tileSize), false);
     }
   }
 }
